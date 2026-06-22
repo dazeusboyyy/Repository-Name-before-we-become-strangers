@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0F172A" />
+  <title>Before We Become Strangers</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --bg2:#111c33;
+      --panel:rgba(15, 23, 42, .84);
+      --panel2:rgba(19, 29, 52, .94);
+      --line:rgba(255,255,255,.10);
+      --text:#f8fafc;
+      --muted:#cbd5e1;
+      --accent:#c4b5fd;
+      --accent2:#7dd3fc;
+      --accent3:#f9a8d4;
+      --good:#a7f3d0;
+      --warn:#fde68a;
+      --shadow:0 24px 70px rgba(0,0,0,.38);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(196,181,253,.14), transparent 26%),
+        radial-gradient(circle at 78% 18%, rgba(125,211,252,.11), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(249,168,212,.06), transparent 28%),
+        linear-gradient(180deg, #0a1020 0%, var(--bg) 55%, #111827 100%);
+      color:var(--text);
+      overflow-x:hidden;
+      font-family: Inter, Poppins, system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    body::before, body::after{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      pointer-events:none;
+      z-index:0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.95) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,.65) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 40% 70%, rgba(255,255,255,.45) 0 1px, transparent 1.2px),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,.80) 0 1px, transparent 1.2px);
+      background-size:180px 180px, 240px 240px, 300px 300px, 260px 260px;
+      opacity:.20;
+      animation: drift 90s linear infinite;
+    }
+    body::after{opacity:.10;filter:blur(.6px);animation-duration:140s}
+    @keyframes drift{
+      from{transform:translate(0,0)}
+      to{transform:translate(20px,-120px)}
+    }
+    .wrap{
+      position:relative;
+      z-index:1;
+      max-width:1180px;
+      margin:0 auto;
+      padding:22px 16px 40px;
+    }
+    .topbar{
+      position:sticky;
+      top:12px;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      margin-bottom:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(8, 12, 22, .80);
+      backdrop-filter: blur(14px);
+      box-shadow:var(--shadow);
+    }
+    .brand{display:flex;flex-direction:column;gap:3px}
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--accent2);
+      font-weight:800;
+    }
+    .brand h1{
+      margin:0;
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:clamp(22px,4.6vw,34px);
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+    .brand p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    button{
+      border:0;
+      font-family:inherit;
+      outline:none;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:999px;
+      padding:11px 14px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+      transition:transform .15s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .btn:hover{transform:translateY(-1px);border-color:rgba(196,181,253,.42)}
+    .btn.primary{
+      background:linear-gradient(135deg, rgba(196,181,253,.26), rgba(125,211,252,.18));
+      border-color:rgba(196,181,253,.30);
+    }
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .progress{
+      margin:14px 0 18px;
+      height:13px;
+      overflow:hidden;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.05);
+    }
+    .progress-bar{
+      width:0%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      box-shadow:0 0 22px rgba(196,181,253,.35);
+      transition:width .4s ease;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:1.35fr .85fr;
+      gap:18px;
+      align-items:stretch;
+      margin-bottom:16px;
+    }
+    .panel{
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--panel), var(--panel2));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .panel .inner{padding:22px}
+    .hero-main{
+      min-height:300px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{
+      font-size:12px;
+      font-weight:800;
+      color:#f7f4ff;
+      background:rgba(196,181,253,.12);
+      border:1px solid rgba(196,181,253,.18);
+      padding:8px 10px;
+      border-radius:999px;
+    }
+    .tag.alt{background:rgba(125,211,252,.10);border-color:rgba(125,211,252,.18)}
+    .tag.hot{background:rgba(249,168,212,.10);border-color:rgba(249,168,212,.18)}
+    .hero h2{
+      margin:0;
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:clamp(34px, 6vw, 54px);
+      line-height:.95;
+      letter-spacing:-.04em;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:15px;
+      max-width:64ch;
+    }
+    .quote{
+      padding:16px 18px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      line-height:1.8;
+      color:#f6f2ff;
+    }
+    .side-card{
+      min-height:300px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      justify-content:space-between;
+      background:
+        radial-gradient(circle at top right, rgba(249,168,212,.12), transparent 38%),
+        linear-gradient(180deg, rgba(20,24,41,.94), rgba(16,20,34,.96));
+    }
+    .meta-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .meta-box{
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .meta-box .label{
+      display:block;
+      margin-bottom:3px;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+    }
+    .meta-box .value{font-weight:700;font-size:14px;line-height:1.4}
+    .mini-note{
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(196,181,253,.10);
+      border:1px solid rgba(196,181,253,.16);
+      line-height:1.7;
+      color:#f8f5ff;
+      font-size:14px;
+    }
+
+    .chapter-shell{
+      display:none;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .chapter-shell.active{display:grid}
+    .chapter-head{padding:18px 20px 0}
+    .chapter-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:var(--accent2);
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      margin-bottom:10px;
+    }
+    .chapter-title{
+      margin:0;
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:clamp(24px,4vw,38px);
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+    .chapter-sub{
+      margin:8px 0 0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+    .content{
+      padding:18px 20px 20px;
+      display:grid;
+      gap:12px;
+    }
+    .speech{
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      line-height:1.85;
+      white-space:pre-line;
+      color:#f8f5ff;
+      font-size:15px;
+    }
+    .speech strong{color:white}
+    .btn-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:0 20px 20px;
+    }
+    .nav-btn{
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.11);
+      transition:transform .15s ease, background .15s ease;
+    }
+    .nav-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+    .nav-btn.primary{
+      background:linear-gradient(135deg, rgba(196,181,253,.22), rgba(125,211,252,.14));
+      border-color:rgba(196,181,253,.24);
+    }
+    .sidebar{display:grid;gap:18px}
+    .list{
+      display:grid;
+      gap:10px;
+      padding:0;
+      margin:0;
+      list-style:none;
+    }
+    .list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      line-height:1.65;
+      font-size:14px;
+      color:#f8f5ff;
+    }
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:linear-gradient(180deg, var(--accent), var(--accent2));
+      box-shadow:0 0 0 4px rgba(196,181,253,.10);
+      margin-top:7px;
+      flex:0 0 auto;
+    }
+
+    .photo-grid{display:grid;gap:12px}
+    .photo-card{
+      overflow:hidden;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      box-shadow:0 16px 28px rgba(0,0,0,.16);
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .photo-card:hover{transform:translateY(-2px);box-shadow:0 20px 32px rgba(0,0,0,.22)}
+    .photo-card img{
+      display:block;
+      width:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      background:rgba(255,255,255,.04);
+    }
+    .cap{
+      padding:12px 12px 14px;
+      font-size:14px;
+      line-height:1.6;
+      color:#f8f5ff;
+    }
+    .cap .small{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .footer-hint{
+      margin-top:18px;
+      text-align:center;
+      font-size:12px;
+      color:#bdb4da;
+      line-height:1.7;
+    }
+    .fade-in{animation:fadeIn .45s ease both}
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .secret-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+      padding:0 2px;
+      border-bottom:1px dashed rgba(255,255,255,.25);
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(4, 7, 14, .72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding:16px;
+      backdrop-filter: blur(8px);
+    }
+    .modal.show{display:flex}
+    .modal-card{
+      width:min(680px, 100%);
+      border-radius:26px;
+      background:linear-gradient(180deg, rgba(24,29,47,.98), rgba(15,19,33,.98));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modal-card .inner{padding:20px}
+    .modal-title{
+      margin:0 0 8px;
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:30px;
+      line-height:1.05;
+    }
+    .modal-text{color:var(--muted);line-height:1.8}
+    .close-row{display:flex;justify-content:flex-end;padding:0 20px 20px}
+
+    .loading{
+      position:fixed;
+      inset:0;
+      background:linear-gradient(180deg, #070b14, #0b1220);
+      z-index:100;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      transition:opacity .6s ease, visibility .6s ease;
+    }
+    .loading.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .loading-card{
+      width:min(720px, 100%);
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(12,18,32,.88);
+      box-shadow:var(--shadow);
+      padding:24px;
+      text-align:center;
+    }
+    .loading-card h2{
+      margin:0 0 10px;
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:clamp(32px,6vw,58px);
+      line-height:.95;
+    }
+    .loading-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+    }
+    .loading-list{
+      margin:18px auto 20px;
+      display:grid;
+      gap:10px;
+      max-width:460px;
+      text-align:left;
+      color:var(--text);
+      font-size:14px;
+    }
+    .loading-list div{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .start-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-width:180px;
+      margin-top:6px;
+    }
+
+    .photo-viewer{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(2,6,23,.88);
+      z-index:60;
+      padding:18px;
+      backdrop-filter: blur(10px);
+    }
+    .photo-viewer.show{display:flex}
+    .photo-viewer-card{
+      width:min(980px,100%);
+      border-radius:26px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(15,23,42,.96);
+      box-shadow:var(--shadow);
+    }
+    .photo-viewer-card img{
+      display:block;
+      width:100%;
+      max-height:70vh;
+      object-fit:contain;
+      background:#020617;
+    }
+    .photo-viewer-caption{
+      padding:16px 18px 18px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+    .photo-viewer-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px 0;
+    }
+    .photo-viewer-top strong{
+      font-family:"Cormorant Garamond", Georgia, serif;
+      font-size:26px;
+      color:var(--text);
+    }
+
+    .floating-cloud{
+      position:fixed;
+      top:72px;
+      left:6%;
+      z-index:1;
+      opacity:.35;
+      pointer-events:none;
+      animation: floaty 16s ease-in-out infinite;
+      font-size:28px;
+      filter:drop-shadow(0 10px 12px rgba(0,0,0,.2));
+    }
+    .floating-cat{
+      position:fixed;
+      bottom:22px;
+      right:18px;
+      z-index:3;
+      cursor:pointer;
+      user-select:none;
+      font-size:28px;
+      opacity:.95;
+      transition:transform .18s ease;
+      filter:drop-shadow(0 12px 16px rgba(0,0,0,.25));
+    }
+    .floating-cat:hover{transform:translateY(-2px) scale(1.05)}
+    @keyframes floaty{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    .tiny-hidden{
+      position:absolute;
+      width:1px;height:1px;
+      overflow:hidden;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    audio{display:none}
+
+    @media (max-width: 980px){
+      .hero,.chapter-shell{grid-template-columns:1fr}
+      .topbar{flex-direction:column;align-items:stretch}
+      .controls{justify-content:flex-start}
+    }
+    @media (max-width: 640px){
+      .wrap{padding:14px 12px 30px}
+      .panel .inner{padding:18px}
+      .chapter-head,.content,.btn-row{padding-left:16px;padding-right:16px}
+      .hero-main,.side-card{min-height:unset}
+      .meta-grid{grid-template-columns:1fr}
+      .hero h2{font-size:34px}
+      .loading-card{padding:18px}
+      .start-btn{width:100%}
+      .floating-cloud{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loadingScreen">
+    <div class="loading-card">
+      <h2>Before We Become Strangers</h2>
+      <p>loading memory archive...</p>
+      <div class="loading-list">
+        <div>✓ Pego Database</div>
+        <div>✓ Boboot Dictionary</div>
+        <div>✓ Sleep Quest Logs</div>
+        <div>✓ Sundubu Records</div>
+        <div>✓ Ray Memories</div>
+        <div>✓ Understandable Virus</div>
+      </div>
+      <button class="btn primary start-btn" id="pressStart">[ PRESS START ]</button>
+    </div>
+  </div>
+
+  <div class="floating-cloud">☁️</div>
+  <div class="floating-cat" id="catEgg" title="cat archive">🐱</div>
+
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <span class="eyebrow">Before We Become Strangers</span>
+        <h1>A Collection of Small Things</h1>
+        <p>lucu dulu, hangat belakangan. bahasa campur secukupnya, kayak obrolan kalian.</p>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="musicBtn">▶ Play Music</button>
+        <button class="btn" id="prevTop">← Back</button>
+        <button class="btn" id="nextTop">Next →</button>
+      </div>
+    </header>
+
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <section class="hero">
+      <div class="panel hero-main">
+        <div class="inner">
+          <div class="tag-row">
+            <span class="tag">memory archive</span>
+            <span class="tag alt">night call vibe</span>
+            <span class="tag hot">PUBG lore</span>
+          </div>
+          <h2 id="heroTitle">Loading Memory...</h2>
+          <p id="heroText">ini bukan surat cinta. ini arsip kecil yang nyimpen momen-momen yang semoga nanti bikin Becky senyum, ketawa, lalu diam sebentar karena ingat masa-masa yang pernah ada.</p>
+        </div>
+        <div class="inner quote" id="heroQuote">"aku cuma nggak mau beberapa kenangan kecil hilang begitu aja."</div>
+      </div>
+
+      <aside class="panel side-card">
+        <div class="inner">
+          <div class="meta-grid">
+            <div class="meta-box"><span class="label">status</span><div class="value">Rare Human Detected</div></div>
+            <div class="meta-box"><span class="label">owner</span><div class="value">Becky</div></div>
+            <div class="meta-box"><span class="label">vibe</span><div class="value">chaotic, cute, brave</div></div>
+            <div class="meta-box"><span class="label">music</span><div class="value">theme.mp3</div></div>
+          </div>
+        </div>
+        <div class="inner"><div class="mini-note" id="sideNote">tekan next pelan-pelan ya. ini bukan sprint, ini time capsule.</div></div>
+      </aside>
+    </section>
+
+    <main id="chapterRoot"></main>
+
+    <div class="footer-hint">dibuat supaya terasa seperti Ray bercerita, bukan AI yang lagi pamer kosakata.</div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <div class="inner">
+        <h3 class="modal-title" id="modalTitle">Achievement Unlocked</h3>
+        <div class="modal-text" id="modalText"></div>
+      </div>
+      <div class="close-row"><button class="btn primary" id="closeModal">Close</button></div>
+    </div>
+  </div>
+
+  <div class="photo-viewer" id="photoViewer">
+    <div class="photo-viewer-card">
+      <div class="photo-viewer-top">
+        <strong id="viewerTitle">Photo</strong>
+        <button class="btn primary" id="closeViewer">Close</button>
+      </div>
+      <img id="viewerImg" alt="preview">
+      <div class="photo-viewer-caption" id="viewerCaption"></div>
+    </div>
+  </div>
+
+  <audio id="bgm" loop preload="auto" src="assets/theme.mp3"></audio>
+
+  <script>
+    const chapters = [
+      {
+        id: 'boot',
+        badge: 'page 0',
+        title: 'Loading Screen',
+        sub: 'membuka arsip kecil sebelum masuk ke isi memori.',
+        quote: '"warning: this file contains an unusual amount of Becky."',
+        intro: 'aku cuma mau bilang dulu: ini mungkin project paling random yang pernah aku buat. dan somehow, semuanya malah jadi tentang Becky.',
+        body: [
+          'kalau kamu buka ini, berarti kamu sudah sampai di tempat di mana kenangan kecil disimpan rapih.',
+          'nggak ada hadiah mahal. nggak ada drama. cuma beberapa potongan masa yang pernah bikin hari terasa lebih hidup.'
+        ],
+        side: 'tekan next pelan-pelan ya. ini bukan sprint, ini time capsule.'
+      },
+      {
+        id: 'lobby',
+        badge: 'chapter 1',
+        title: 'The Random Match',
+        sub: 'waktu pertama kali ketemu, aku biasa aja.',
+        quote: '"normal match. normal lobby. normal day."',
+        intro: 'waktu pertama kali ketemu kamu, jujur aja aku nggak terlalu peduli. bukan karena kamu aneh, cuma karena aku memang gitu ke orang baru. apalagi waktu itu kamu lagi dekat sama cowok lain.',
+        body: [
+          'jadi ya, itu cuma match biasa.',
+          'aku nggak nyangka kalau dari lobby random begitu, ternyata kamu bakal muncul lagi berkali-kali di hidupku.',
+          'dan kalau ada yang bilang waktu itu kamu bakal jadi orang yang sering aku ingat, aku pasti bakal ketawa.'
+        ],
+        side: 'di sini kita taruh foto awal / match paling tua kalau kamu punya.'
+      },
+      {
+        id: 'call',
+        badge: 'chapter 2',
+        title: 'The First Call',
+        sub: 'titik balik yang bikin semuanya mulai berubah.',
+        quote: '"temenin aku telfon ya..."',
+        intro: 'yang paling aku ingat justru bukan momen mabar pertama. yang paling berubah malah saat kamu minta ditemani telepon karena takut sendirian di kost.',
+        body: [
+          'dari situ kita mulai lebih sering ngobrol.',
+          'lama-lama nggak cuma game, tapi juga kuliah, tugas, gosip, masa lalu, dan rencana-rencana besar kamu.',
+          'anehnya, dari hal sesederhana itu, semuanya jadi terasa dekat.'
+        ],
+        side: 'ini salah satu titik penting. dari sini hubungan kalian mulai jadi rutinitas.'
+      },
+      {
+        id: 'sleep',
+        badge: 'chapter 3',
+        title: 'Sleep Quest',
+        sub: 'misi yang gagal terus, tapi lucunya justru itu.',
+        quote: '"aku masih ngantuk ray... ini aja mataku masih ketutup nih..."',
+        intro: 'kalau kamu minta dibangunin, biasanya suaramu langsung berubah jadi mode ngantuk total. dan aku selalu bisa langsung kebayang: mata masih ketutup, suara kecil, lalu muncul kalimat sakral: 10 minit lagi ya.',
+        body: [
+          'aku sampai hafal pola kamu: minta dibangunin, lalu tidur lagi.',
+          'dan somehow itu nggak pernah bikin aku kesal beneran.',
+          'malah jadi salah satu hal yang paling lucu dan paling khas dari kamu.'
+        ],
+        side: 'chapter ini cocok kalau nanti diberi animasi jam / alarm kecil.'
+      },
+      {
+        id: 'ray',
+        badge: 'chapter 4',
+        title: 'The Ray Incident',
+        sub: 'nama panggilan yang menyebar dari satu orang ke banyak orang.',
+        quote: '"Ray"',
+        intro: 'aku masih ingat dulu orang manggil aku dengan nama yang lain. lalu kamu datang, dan entah sejak kapan, semua ikut berubah.',
+        body: [
+          'dari kamu, nama itu nyangkut.',
+          'dari nama itu, orang lain ikut pakai.',
+          'dan sekarang hampir semua orang manggil aku Ray.',
+          'damn. you really changed my name lore.'
+        ],
+        side: 'kalau ada chapter yang bisa bikin dia senyum kecil, ini salah satunya.'
+      },
+      {
+        id: 'quotes',
+        badge: 'chapter 5',
+        title: 'Becky Quotes',
+        sub: 'arsip kata-kata khas yang cuma Becky bisa bikin normal.',
+        quote: '"HAAHH pego, mana pego nya Ray hahaha"',
+        intro: 'kalau ada satu hal yang bikin kamu susah diganti, itu bukan cuma kepribadianmu. tapi cara kamu ngomong.',
+        body: [
+          'pego.',
+          'bobot.',
+          'understandable.',
+          'whisema.',
+          'dan satu kalimat yang selalu mulai dengan: eh Ray aku mau cerita.',
+          'itu semua kecil, tapi justru itu yang bikin aku langsung tahu: oh, ini Becky.'
+        ],
+        side: 'chapter ini cocok buat kartu-kartu kecil satu per satu.'
+      },
+      {
+        id: 'pubg',
+        badge: 'chapter 6',
+        title: 'PUBG Chaos Archive',
+        sub: 'tempat semua kehebohan kamu tersimpan.',
+        quote: '"ohhh rey kamu abis belanja pasti duitmu banyak ya? mana duitmu cepat berikan hahaha"',
+        intro: 'di game kamu bisa jadi chaos kecil yang lucu banget. kadang panik, kadang ngerush, kadang ngewarnain aku, kadang malah nyerobot duit in game.',
+        body: [
+          'P90 langsung berubah nama jadi pego.',
+          'bobot lahir dari bot.',
+          'duit in game sering dimintain.',
+          'kalau aku bikin salah pas rush, kamu bakal ngoreksi.',
+          'kalau aku lagi kepedean, kamu langsung roast sebentar.',
+          'dan kalau ada musuh banyak, kamu bisa panik dengan cara yang justru bikin aku ketawa.'
+        ],
+        side: 'di sini kita taruh screenshot / foto in-game yang paling lucu.'
+      },
+      {
+        id: 'silent',
+        badge: 'chapter 7',
+        title: 'The Silent Call',
+        sub: 'nggak banyak ngomong, tapi tetap enak.',
+        quote: '"kamu lagi belajar. aku lagi kerja. atau aku cuma scroll TikTok."',
+        intro: 'nggak semua call harus rame. kadang kamu belajar, aku kerja, atau kamu masak, atau aku cuma scroll TikTok, dan call tetap jalan.',
+        body: [
+          'dan anehnya, hening seperti itu nggak pernah terasa canggung.',
+          'mungkin karena kita sama-sama tahu: selama suara itu masih ada, semuanya masih baik-baik saja.',
+          'aku juga ingat kamu suka makanan berkuah, dan sundubu-jjigae itu salah satu favoritmu. itu detail kecil, tapi nyangkut.'
+        ],
+        side: 'foto sundubu-jjigae masuk di sini biar chapternya terasa hangat.'
+      },
+      {
+        id: 'real',
+        badge: 'chapter 8',
+        title: 'Things Becky Doesn’t Realize',
+        sub: 'bagian yang paling jujur, paling pelan, tapi paling penting.',
+        quote: '"i don’t think you realize this..."',
+        intro: 'aku rasa ada banyak hal tentang kamu yang mungkin kamu sendiri nggak sadar. dan justru itu yang paling menarik.',
+        body: [
+          'kamu bingung kenapa orang bilang kamu cantik. padahal menurutku bukan cuma soal muka.',
+          'kamu nggak suka merepotkan keluarga, dan itu keliatan dari cara kamu menjalani banyak hal sendiri.',
+          'kamu punya target yang jelas, dan aku selalu suka dengar kamu cerita soal masa depan.',
+          'kamu sering bilang understandable, lalu kata itu ikut nyangkut ke aku.',
+          'dan kalau kamu nanya soal Indonesia, aku selalu senang ngejelasinnya. jujur, itu bikin aku merasa keren.'
+        ],
+        side: 'bagian ini jangan terlalu panjang. cukup pelan, cukup jujur.'
+      },
+      {
+        id: 'photos',
+        badge: 'chapter 9',
+        title: 'Photo Archive',
+        sub: 'foto-foto yang nyimpen cerita.',
+        quote: '"we barely have photos together, so technology had to help."',
+        intro: 'bagian ini bakal terasa kayak scrapbook. tiap foto punya cerita pendek, bukan caption panjang.',
+        body: [],
+        side: 'di bawah ini ada slot untuk foto asli + foto AI.'
+      },
+      {
+        id: 'small',
+        badge: 'chapter 10',
+        title: 'Small Things I’ll Probably Remember',
+        sub: 'hal-hal kecil yang nyangkut di kepala.',
+        quote: '"eh ray aku mau cerita."',
+        intro: 'jujur aku nggak ingat semuanya. tapi ada beberapa hal kecil yang masih nyangkut, dan justru itu yang sering paling berarti.',
+        body: [
+          'cara kamu ketawa.',
+          'cara kamu bilang eh Ray dulu sebelum cerita panjang.',
+          'cara kamu nanya hal-hal random tentang Indonesia.',
+          'cara kamu nge-roast lalu ketawa sendiri.',
+          'cara kamu tetap terdengar seperti kamu, bahkan saat lagi capek.'
+        ],
+        side: 'chapter ini bisa jadi jembatan menuju ending.'
+      },
+      {
+        id: 'end',
+        badge: 'final file',
+        title: 'If You Open This Again Someday',
+        sub: 'penutup yang nggak minta apa-apa, cuma nyimpen kenangan.',
+        quote: '"once upon a time, we had a really good time."',
+        intro: 'kalau suatu hari kamu buka ini lagi, aku harap kamu nggak ngerasa berat. aku cuma pengen kamu senyum.',
+        body: [
+          'karena tujuan website ini dari awal sebenarnya sederhana: aku nggak mau beberapa kenangan kecil hilang begitu aja.',
+          'kalau nanti hidup bawa kita ke arah yang beda, itu nggak ngubah fakta bahwa dulu kita pernah punya masa yang seru banget.',
+          'jadi ya... thanks for being part of it.',
+          'and if you still say understandable when you read this... understandable.'
+        ],
+        side: 'tombol restart nanti bisa bawa balik ke awal.'
+      }
+    ];
+
+    const photoCards = [
+      {
+        src:'assets/photo1.jpg',
+        title:'The Beginning We Didn’t Notice',
+        cap:'kalau dipikir-pikir, waktu foto ini diambil aku bahkan belum tahu bakal ada banyak cerita setelah ini.'
+      },
+      {
+        src:'assets/photo2.jpg',
+        title:'Mission: Top 10',
+        cap:'survival first. dignity later. semak-semak mungkin bukan strategi terhormat, tapi efektif.'
+      },
+      {
+        src:'assets/photo3.jpg',
+        title:'Sundubu-jjigae Evidence',
+        cap:'aku langsung ingat: oh iya, ini cewek kuah. sundubu-jjigae punya tempat khusus di arsip ini.'
+      },
+      {
+        src:'assets/photo4.jpg',
+        title:'Assignment Support DLC',
+        cap:'nggak semua kenangan kita terjadi di Erangel. kadang juga di depan deadline tugas.'
+      },
+      {
+        src:'assets/photo5.jpg',
+        title:'Artificial Memory',
+        cap:'kita nggak punya banyak foto bareng, jadi yang satu ini ikut bantu nyimpen momen yang nggak sempat ke-capture.'
+      }
+    ];
+
+    const root = document.getElementById('chapterRoot');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroText = document.getElementById('heroText');
+    const heroQuote = document.getElementById('heroQuote');
+    const sideNote = document.getElementById('sideNote');
+    const progressBar = document.getElementById('progressBar');
+    const musicBtn = document.getElementById('musicBtn');
+    const bgm = document.getElementById('bgm');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const pressStart = document.getElementById('pressStart');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const closeModal = document.getElementById('closeModal');
+    const photoViewer = document.getElementById('photoViewer');
+    const viewerImg = document.getElementById('viewerImg');
+    const viewerTitle = document.getElementById('viewerTitle');
+    const viewerCaption = document.getElementById('viewerCaption');
+    const closeViewer = document.getElementById('closeViewer');
+    const catEgg = document.getElementById('catEgg');
+
+    let current = 0;
+    let playing = false;
+    let loaded = false;
+    let understandableClicks = 0;
+
+    function escapeHTML(s){
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+
+    function setProgress(){
+      progressBar.style.width = `${((current + 1) / chapters.length) * 100}%`;
+      document.getElementById('prevTop').disabled = current === 0;
+      document.getElementById('nextTop').textContent = current === chapters.length - 1 ? 'Restart ↺' : 'Next →';
+    }
+
+    function placeholderSVG(title){
+      return `
+        <svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#23314f"/>
+              <stop offset="100%" stop-color="#101724"/>
+            </linearGradient>
+          </defs>
+          <rect width="900" height="700" fill="url(#g)"/>
+          <circle cx="680" cy="120" r="90" fill="#c4b5fd" opacity="0.15"/>
+          <circle cx="150" cy="170" r="120" fill="#7dd3fc" opacity="0.10"/>
+          <text x="50%" y="46%" text-anchor="middle" fill="#f8fafc" font-family="Arial" font-size="34" font-weight="700">Photo Placeholder</text>
+          <text x="50%" y="56%" text-anchor="middle" fill="#cbd5e1" font-family="Arial" font-size="22">${escapeHTML(title)}</text>
+        </svg>`;
+    }
+
+    function openModal(title, text){
+      modalTitle.textContent = title;
+      modalText.innerHTML = text;
+      modal.classList.add('show');
+    }
+    closeModal.addEventListener('click', () => modal.classList.remove('show'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+    function openPhotoViewer(card){
+      viewerImg.src = card.src;
+      viewerImg.alt = card.title;
+      viewerTitle.textContent = card.title;
+      viewerCaption.textContent = card.cap;
+      photoViewer.classList.add('show');
+    }
+    closeViewer.addEventListener('click', () => photoViewer.classList.remove('show'));
+    photoViewer.addEventListener('click', (e) => { if (e.target === photoViewer) photoViewer.classList.remove('show'); });
+
+    function makeSideBullets(ch){
+      const map = {
+        boot:['loading screen','warning kecil','tujuan: bikin penasaran'],
+        lobby:['random lobby','pertama kali ketemu','kesan awal biasa saja'],
+        call:['telepon karena takut sendirian','obrolan mulai panjang','kamu mulai jadi rutin'],
+        sleep:['"10 minit lagi"','mata masih ketutup','telat bangun lagi'],
+        ray:['nama panggilan','lore menyebar','Ray muncul ke mana-mana'],
+        quotes:['pego','bobot','understandable','whisema'],
+        pubg:['duit in game','backup teman','ngendok top 10'],
+        silent:['dia belajar','kamu kerja / scroll TikTok','tetap nyaman walau diam'],
+        real:['dia bingung kenapa dipuji','masa depan jelas','menular lewat bahasa'],
+        photos:['foto asli masuk sini','caption pendek','scrapbook feel'],
+        small:['eh Ray aku mau cerita','understandable','hal-hal kecil nyangkut'],
+        end:['kenangan disimpan','tanpa paksaan','penutup hangat']
+      };
+      return map[ch.id] || ['detail kecil','cerita hangat','kalimat natural'];
+    }
+
+    function injectSecretChips(text, chapterId){
+      let out = escapeHTML(text);
+      if(chapterId === 'quotes'){
+        out = out.replace(/pego/gi, '<span class="secret-chip" data-egg="pego"><strong>pego</strong></span>');
+        out = out.replace(/bobot/gi, '<span class="secret-chip" data-egg="pego"><strong>bobot</strong></span>');
+        out = out.replace(/understandable/gi, '<span class="secret-chip" data-egg="understandable"><strong>understandable</strong></span>');
+        out = out.replace(/whisema/gi, '<span class="secret-chip" data-egg="understandable"><strong>whisema</strong></span>');
+      }
+      if(chapterId === 'ray'){
+        out = out.replace(/Ray/g, '<span class="secret-chip" data-egg="ray"><strong>Ray</strong></span>');
+      }
+      if(chapterId === 'small'){
+        out = out.replace(/understandable/gi, '<span class="secret-chip" data-egg="understandable"><strong>understandable</strong></span>');
+        out = out.replace(/eh Ray aku mau cerita/gi, '<span class="secret-chip" data-egg="ray"><strong>eh Ray aku mau cerita</strong></span>');
+      }
+      return out;
+    }
+
+    function renderPhotoGrid(){
+      const grid = document.getElementById('photoGrid');
+      if(!grid) return;
+      grid.innerHTML = photoCards.map((p, i) => `
+        <div class="photo-card fade-in" style="animation-delay:${i*60}ms" data-index="${i}">
+          <img src="${p.src}" alt="${escapeHTML(p.title)}" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(p.title))}'">
+          <div class="cap"><strong>${escapeHTML(p.title)}</strong><span class="small">${escapeHTML(p.cap)}</span></div>
+        </div>
+      `).join('');
+      grid.querySelectorAll('.photo-card').forEach(card => {
+        card.addEventListener('click', () => openPhotoViewer(photoCards[Number(card.dataset.index)]));
+      });
+    }
+
+    function renderChapter(index){
+      current = Math.max(0, Math.min(index, chapters.length - 1));
+      const ch = chapters[current];
+      setProgress();
+      heroTitle.textContent = ch.title;
+      heroText.textContent = ch.intro;
+      heroQuote.textContent = ch.quote;
+      sideNote.textContent = ch.side;
+      root.innerHTML = '';
+
+      const section = document.createElement('section');
+      section.className = 'chapter-shell active fade-in';
+
+      const left = document.createElement('article');
+      left.className = 'panel';
+      const bodyHTML = ch.body.map(line => `<div class="speech">${injectSecretChips(line, ch.id)}</div>`).join('');
+      left.innerHTML = `
+        <div class="chapter-head">
+          <div class="chapter-badge">${escapeHTML(ch.badge)}</div>
+          <h3 class="chapter-title">${escapeHTML(ch.title)}</h3>
+          <p class="chapter-sub">${escapeHTML(ch.sub)}</p>
+        </div>
+        <div class="content">
+          <div class="speech">${injectSecretChips(ch.intro, ch.id)}</div>
+          ${bodyHTML}
+          <div class="speech"><strong>${injectSecretChips(ch.quote, ch.id)}</strong></div>
+        </div>
+        <div class="btn-row">
+          <button class="nav-btn" id="backBtn">← Back</button>
+          <button class="nav-btn primary" id="nextBtn">${current === chapters.length - 1 ? 'Restart Memory ↺' : 'Next →'}</button>
+        </div>
+      `;
+
+      const right = document.createElement('aside');
+      right.className = 'sidebar';
+
+      if(ch.id === 'photos'){
+        right.innerHTML = `
+          <div class="panel">
+            <div class="inner">
+              <div class="chapter-badge">photo archive</div>
+              <h3 class="chapter-title" style="font-size:26px;">scrapbook pages</h3>
+              <p class="chapter-sub">ganti file gambar di folder <strong>assets/</strong> dengan foto asli kamu. foto 1 sampai 5 sudah disusun sesuai urutan cerita.</p>
+            </div>
+          </div>
+          <div class="photo-grid" id="photoGrid"></div>
+        `;
+      } else if(ch.id === 'end'){
+        right.innerHTML = `
+          <div class="panel">
+            <div class="inner">
+              <div class="chapter-badge">ending note</div>
+              <h3 class="chapter-title" style="font-size:26px;">not a goodbye</h3>
+              <p class="chapter-sub">ini cuma cara kecil buat nyimpen masa yang pernah ada.</p>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="inner">
+              <div class="mini-note">kalau nanti Becky buka ini lagi dan senyum, mission accomplished.</div>
+            </div>
+          </div>
+        `;
+      } else {
+        right.innerHTML = `
+          <div class="panel">
+            <div class="inner">
+              <div class="chapter-badge">memory tag</div>
+              <h3 class="chapter-title" style="font-size:26px;">${escapeHTML(ch.title)}</h3>
+              <p class="chapter-sub">${escapeHTML(ch.quote)}</p>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="inner">
+              <ul class="list">
+                ${makeSideBullets(ch).map(item => `<li><span class="dot"></span><span>${escapeHTML(item)}</span></li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        `;
+      }
+
+      section.appendChild(left);
+      section.appendChild(right);
+      root.appendChild(section);
+
+      bindNav();
+      if(ch.id === 'photos') renderPhotoGrid();
+      document.title = `Before We Become Strangers — ${ch.title}`;
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function bindNav(){
+      const nextBtn = document.getElementById('nextBtn');
+      const backBtn = document.getElementById('backBtn');
+      nextBtn.onclick = () => {
+        if(current === chapters.length - 1){
+          renderChapter(0);
+        } else {
+          renderChapter(current + 1);
+        }
+      };
+      backBtn.onclick = () => {
+        if(current > 0) renderChapter(current - 1);
+      };
+    }
+
+    document.getElementById('prevTop').addEventListener('click', () => { if(current > 0) renderChapter(current - 1); });
+    document.getElementById('nextTop').addEventListener('click', () => { if(current === chapters.length - 1) renderChapter(0); else renderChapter(current + 1); });
+
+    document.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-egg]');
+      if(!t) return;
+      const egg = t.dataset.egg;
+      if(egg === 'understandable'){
+        understandableClicks += 1;
+        if(understandableClicks >= 5){
+          understandableClicks = 0;
+          openModal('Achievement Unlocked', `
+            <strong>Certified Becky Dictionary</strong><br><br>
+            this word has caused irreversible damage to Ray's vocabulary.<br><br>
+            <strong>Unlocked terms:</strong><br>
+            Pego<br>
+            Boboot<br>
+            Understandable<br>
+            Ndal Sendal<br>
+            10 minit lagi
+          `);
+        }
+      }
+      if(egg === 'pego'){
+        openModal('Emergency Alert', `<strong>P90 detected nearby.</strong><br><br>Becky is about to become extremely excited.`);
+      }
+      if(egg === 'ray'){
+        openModal('Status', `<strong>Ray</strong><br><br>probably sleeping, probably working, probably hearing Becky in his head.`);
+      }
+    });
+
+    musicBtn.addEventListener('click', async () => {
+      try{
+        if(!playing){
+          await bgm.play();
+          playing = true;
+          musicBtn.textContent = '⏸ Pause Music';
+        } else {
+          bgm.pause();
+          playing = false;
+          musicBtn.textContent = '▶ Play Music';
+        }
+      } catch {
+        alert('Browser kamu memblokir audio duluan. Tekan lagi setelah halaman terbuka ya.');
+      }
+    });
+
+    function startExperience(){
+      loadingScreen.classList.add('hide');
+      loaded = true;
+      renderChapter(0);
+      // try to start music on first user interaction
+      if(!playing){
+        bgm.play().then(() => {
+          playing = true;
+          musicBtn.textContent = '⏸ Pause Music';
+        }).catch(() => {});
+      }
+    }
+
+    pressStart.addEventListener('click', startExperience);
+    window.addEventListener('keydown', (e) => {
+      if(!loaded && (e.key === 'Enter' || e.key === ' ')) startExperience();
+      if(e.key === 'Escape'){
+        modal.classList.remove('show');
+        photoViewer.classList.remove('show');
+      }
+    });
+
+    catEgg.addEventListener('click', () => {
+      openModal('Meow', `<strong>Cat archive unlocked.</strong><br><br>Becky once donated money to feed cats.<br>This page remembers that.`);
+    });
+
+    renderChapter(0);
+    window.BeforeWeBecomeStrangers = {
+      chapters,
+      photoCards,
+      renderChapter,
+      openModal
+    };
+  </script>
+</body>
+</html>
